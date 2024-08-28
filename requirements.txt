@@ -8,3 +8,7 @@ scipy
 statsmodels
 pyaudio
 librosa
+torch
+torchaudio
+speechbrain
+pyannote.core
