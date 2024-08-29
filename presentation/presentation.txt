@@ -1,0 +1,54 @@
+## Speequal
+# Promoting Fair Conversations
+
+---
+
+# Team
+
+1. Christian Reimann (Software Developer)
+2. Jakob Koscholke (Researcher)
+
+---
+
+# Data Product
+
+1. What?
+2. Why?
+3. For Whom?
+
+---
+
+# Challenges
+
+1. Unsupervised setting
+2. Lightweight model
+3. Real-time processing
+4. Speaker number recognition
+
+---
+
+# Overview
+
+1. Graphical overview of audio signal being processed
+
+---
+
+# X-Vectors
+
+1. Developed by 
+
+---
+
+# Clustering
+
+1. Why KMeans is not an option
+2. Can we do without speaker numbers?
+
+---
+
+# Outlook
+
+1. From python script to app
+2. Extra features (NLP, sentiment analysis, filling words, information-density)
+
+
