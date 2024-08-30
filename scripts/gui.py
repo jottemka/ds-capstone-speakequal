@@ -22,7 +22,7 @@ warnings.filterwarnings("ignore")
 # Load pre-trained x-vector model
 xvector_model = SpeakerRecognition.from_hparams(
     source="speechbrain/spkrec-xvect-voxceleb",
-    savedir="pretrained_models/spkrec-xvect-voxceleb"
+    savedir="data/derived/pretrained_models/spkrec-xvect-voxceleb"
 )
 
 class AudioRecorderApp(QWidget):
