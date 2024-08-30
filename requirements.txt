@@ -12,3 +12,7 @@ torch
 torchaudio
 speechbrain
 pyannote.core
+pyannote.metrics
+pyannote.audio
+diart
+PyQt5

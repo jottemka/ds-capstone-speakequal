@@ -85,7 +85,7 @@ class AudioRecorderApp(QWidget):
 
         # Convert recorded chunks to a numpy array
         self.recording_data = np.concatenate(self.recording_data, axis=0)
-        write('output.wav', self.fs, self.recording_data)  # Save the recording to a WAV file
+        write('data/derived/output.wav', self.fs, self.recording_data)  # Save the recording to a WAV file
         self.plot_button.setEnabled(True)  # Enable plotting button after recording
 
     def audio_callback(self, indata, frames, time, status):
@@ -99,7 +99,7 @@ class AudioRecorderApp(QWidget):
         if self.recording_data.any():
 
             # Load audio file (fs is sampling rate)
-            signal, fs = torchaudio.load("output.wav")
+            signal, fs = torchaudio.load("data/derived/output.wav")
 
             # Ensure the audio is mono and 16kHz
             if signal.shape[0] > 1:
