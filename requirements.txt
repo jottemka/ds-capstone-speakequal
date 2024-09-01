@@ -16,3 +16,4 @@ pyannote.metrics
 pyannote.audio
 diart
 PyQt5
+onnxruntime
