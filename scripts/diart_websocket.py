@@ -25,7 +25,7 @@ def client_response(annotation):
     if len(chart) > 0:
         source.send(json.dumps(chart))
 
-login(HUGGING_FACE_TOKEN)
+#login(HUGGING_FACE_TOKEN)
 
 segmentation = SegmentationModel.from_pretrained("pyannote/segmentation-3.0")
 embedding = EmbeddingModel.from_pretrained("pyannote/embedding")
