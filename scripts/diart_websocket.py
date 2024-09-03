@@ -3,13 +3,14 @@ from diart.sources import WebSocketAudioSource
 from diart.inference import StreamingInference
 from diart.models import SegmentationModel, EmbeddingModel
 from diart.sinks import Observer
+import webbrowser
 
 from huggingface_hub import login
 
 import json
 
 SAMPLE_RATE = 16000
-HUGGING_FACE_TOKEN = "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"
+#HUGGING_FACE_TOKEN = "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"
 
 class DummyObserver(Observer):
 
@@ -25,7 +26,7 @@ def client_response(annotation):
     if len(chart) > 0:
         source.send(json.dumps(chart))
 
-login(HUGGING_FACE_TOKEN)
+#login(HUGGING_FACE_TOKEN)
 
 segmentation = SegmentationModel.from_pretrained("pyannote/segmentation-3.0")
 embedding = EmbeddingModel.from_pretrained("pyannote/embedding")
@@ -53,5 +54,9 @@ inference = StreamingInference(
 inference.attach_hooks(client_response)
 inference.attach_observers(DummyObserver())
 
+webbrowser.open('../webapp/streaming.html')
+
 print("Waiting for signal..")
 prediction = inference()
+
+
