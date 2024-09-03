@@ -5,12 +5,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Microphone to WebSocket</title>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style type="text/css">
+
+        body {
+            font-family: Arial, Helvetica, sans-serif;
+        }
+
+        #page-container { 
+            margin: auto;
+            width: 500px;
+            text-align: center;      
+        }
+
+    </style>
 </head>
 <body>
-    <h1>Microphone Streaming to WebSocket</h1>
-    <button id="start">Start Streaming</button>
-    <button id="stop" disabled>Stop Streaming</button>
-    <div style="width: 500px;"><canvas id="chartjsPieChart"></canvas></div>
-    <script type="text/javascript" src="streaming.js"></script>
+    <div id="page-container">
+        <h1>SpeakEqual</h1>
+        <div>
+            <button onclick="handleToggle()" id="toggleButton">Start conversation</button>
+            <button onclick="resetConversation()">Reset</button>
+        </div>
+        <div>
+            <canvas id="chartjsPieChart"></canvas>
+        </div>
+        <script type="text/javascript" src="streaming.js"></script>
+    </div>
 </body>
 </html>

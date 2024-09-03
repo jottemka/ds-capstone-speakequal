@@ -1,6 +1,3 @@
-document.getElementById('start').addEventListener('click', startStreaming);
-document.getElementById('stop').addEventListener('click', stopStreaming);
-
 let audioContext;
 let mediaStream;
 let socket;
@@ -9,8 +6,6 @@ let pieChart;
 let aggregatedShares = {};
 
 function startStreaming() {
-    document.getElementById('start').disabled = true;
-    document.getElementById('stop').disabled = false;
 
     socket = new WebSocket('ws://127.0.0.1:7007'); 
 
@@ -25,7 +20,6 @@ function startStreaming() {
     };
     socket.onmessage = function(event) {
         data = JSON.parse(event.data)
-        console.log(data)
         data.forEach(([key, value]) => {
             if (aggregatedShares[key]) {
                 aggregatedShares[key] += value;
@@ -61,9 +55,19 @@ function startStreaming() {
     });
 }
 
+function handleToggle() {
+
+    button = document.getElementById('toggleButton')
+    if(button.textContent === 'Start conversation') {
+        startStreaming();
+        document.getElementById('toggleButton').textContent = 'Stop conversation';
+    } else {
+        stopStreaming();
+        document.getElementById('toggleButton').textContent = 'Start conversation';
+    }
+}
+
 function stopStreaming() {
-    document.getElementById('start').disabled = false;
-    document.getElementById('stop').disabled = true;
 
     if (scriptProcessor) {
         scriptProcessor.disconnect();
@@ -86,7 +90,38 @@ function stopStreaming() {
     }
 }
 
+function resetConversation() {
+    
+    aggregatedShares = {}
+    drawPie(aggregatedShares)
+}
+
+function drawPie(data) {
+
+    let labels = Object.keys(data)
+    let timeshares = Object.values(data)
+
+    if(pieChart == null) {
+        const ctx = document.getElementById('chartjsPieChart').getContext('2d');
+        pieChart = new Chart(ctx, {
+            type: 'doughnut',
+            data: {
+                labels: labels,
+                datasets: [{
+                    data: timeshares,
+                    backgroundColor: ["#FFB3BA","#FFDFBA","#FFFFBA","#BAFFC9","#BAE1FF","#D4A5A5","#D4B5E8","#FFB7CE","#C4FCEF","#FFE5CC"]
+                }]
+            }
+        });
+    } else {
+        pieChart.data.labels = labels;
+        pieChart.data.datasets[0].data = timeshares;
+        pieChart.update();
+    }
+}
+
 function float32ToBase64(float32Array) {
+
     const byteLength = float32Array.length * 4;
     const buffer = new ArrayBuffer(byteLength);
     const view = new DataView(buffer);
@@ -98,27 +133,4 @@ function float32ToBase64(float32Array) {
     const bytes = new Uint8Array(buffer);
     const base64String = btoa(String.fromCharCode.apply(null, bytes));
     return base64String;
-}
-
-function drawPie(data) {
-
-    let labels = Object.keys(data)
-    let timeshares = Object.values(data)
-
-    if(pieChart == null) {
-        const ctx = document.getElementById('chartjsPieChart').getContext('2d');
-        pieChart = new Chart(ctx, {
-            type: 'pie',
-            data: {
-                labels: labels,
-                datasets: [{
-                    data: timeshares
-                }]
-            }
-        });
-    } else {
-        pieChart.data.labels = labels;
-        pieChart.data.datasets[0].data = timeshares;
-        pieChart.update();
-    }
 }
