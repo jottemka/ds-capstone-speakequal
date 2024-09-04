@@ -12,13 +12,13 @@ import warnings
 
 warnings.simplefilter(action='ignore')
 
-segmentation = m.SegmentationModel.from_pretrained("pyannote/segmentation")
+segmentation = m.SegmentationModel.from_pretrained("pyannote/segmentation-3.0")
 embedding = m.EmbeddingModel.from_pretrained("speechbrain/spkrec-xvect-voxceleb")
 
 config = SpeakerDiarizationConfig(
     segmentation=segmentation,
     embedding=embedding,
-    #tau_active = .576, # Threshold for detecting active speakers.
+    #tau_active = .1, # Threshold for detecting active speakers.
     delta_new = .1, # If the distance between a local speaker and all centroids is larger than delta_new, then a new centroid is created for the current speaker.
     metric = "cosine",
     max_speakers = 20,

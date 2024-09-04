@@ -35,9 +35,13 @@ config = SpeakerDiarizationConfig(
     segmentation=segmentation,
     embedding=embedding,
     sample_rate=SAMPLE_RATE,
-    duration=5,
-    step=0.5,
-    latency=0.5
+    #duration=5,
+    #step=0.5,
+    #latency=0.5,
+    #tau_active = .576, # Threshold for detecting active speakers.
+    delta_new = 1, # If the distance between a local speaker and all centroids is larger than delta_new, then a new centroid is created for the current speaker.
+    metric = "cosine",
+    max_speakers = 20,
 )
 
 pipeline = SpeakerDiarization(config)
