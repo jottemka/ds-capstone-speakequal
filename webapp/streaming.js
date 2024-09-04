@@ -1,9 +1,48 @@
+
+class Queue {
+    constructor() {
+        this.items = [];
+    }
+
+    enqueue(item) {
+        this.items.push(item);
+    }
+
+    dequeue() {
+    if (this.items.length === 0) {
+        return null;
+    }
+        return this.items.shift();
+    }
+
+    isEmpty() {
+        return this.items.length === 0;
+    }
+}
+
 let audioContext;
 let mediaStream;
 let socket;
 let scriptProcessor;
 let pieChart;
+let intervalId;
 let aggregatedShares = {};
+
+const queue = new Queue();
+
+function aggregateShares() {
+    while(!queue.isEmpty()) {
+        data = JSON.parse(queue.dequeue())
+        data.forEach(([key, value]) => {
+            if (aggregatedShares[key]) {
+                aggregatedShares[key] += value;
+            } else {
+                aggregatedShares[key] = value;
+            }
+        });
+    }
+    drawPie(aggregatedShares)
+}
 
 function startStreaming() {
 
@@ -19,15 +58,8 @@ function startStreaming() {
         console.error('WebSocket error:', error);
     };
     socket.onmessage = function(event) {
-        data = JSON.parse(event.data)
-        data.forEach(([key, value]) => {
-            if (aggregatedShares[key]) {
-                aggregatedShares[key] += value;
-            } else {
-                aggregatedShares[key] = value;
-            }
-        });
-        drawPie(aggregatedShares)
+        queue.enqueue(event.data)
+        console.log(event.data)
     };
 
     audioContext = new (window.AudioContext || window.webkitAudioContext)();
@@ -45,7 +77,7 @@ function startStreaming() {
             const inputBuffer = event.inputBuffer.getChannelData(0); 
             const base64String = float32ToBase64(inputBuffer);
 
-            if (socket.readyState === WebSocket.OPEN) {
+            if (socket && socket.readyState === WebSocket.OPEN) {
                 socket.send(base64String);
             }
         };
@@ -53,6 +85,8 @@ function startStreaming() {
         console.error('Error accessing microphone:', err);
         stopStreaming();
     });
+
+    intervalId = setInterval(aggregateShares, 3000);
 }
 
 function handleToggle() {
@@ -68,6 +102,10 @@ function handleToggle() {
 }
 
 function stopStreaming() {
+
+    if(intervalId) {
+        clearInterval(intervalId);
+    }
 
     if (scriptProcessor) {
         scriptProcessor.disconnect();
