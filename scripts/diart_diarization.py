@@ -7,19 +7,19 @@ from diart.models import SegmentationModel, EmbeddingModel
 from huggingface_hub import login
 
 HUGGING_FACE_TOKEN = "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"
-login(HUGGING_FACE_TOKEN)
+#login(HUGGING_FACE_TOKEN)
 
 segmentation = SegmentationModel.from_pretrained("pyannote/segmentation")
 embedding = EmbeddingModel.from_pretrained("pyannote/embedding")
 
 config = SpeakerDiarizationConfig(
     segmentation=segmentation,
-    embedding=embedding
+    embedding=embedding,
+    delta_new=0.7
 )
 pipeline = SpeakerDiarization(config)
 mic = MicrophoneAudioSource()
 
 inference = StreamingInference(pipeline, mic, do_plot=True)
-inference.attach_observers(RTTMWriter(mic.uri, "data/derived/stream.rttm"))
 
 prediction = inference()
