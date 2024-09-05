@@ -74,7 +74,8 @@ function startStreaming() {
         scriptProcessor.connect(audioContext.destination);
 
         scriptProcessor.onaudioprocess = function(event) {
-            const inputBuffer = event.inputBuffer.getChannelData(0); 
+            const inputBuffer = event.inputBuffer.getChannelData(0);
+            
             const base64String = float32ToBase64(inputBuffer);
 
             if (socket && socket.readyState === WebSocket.OPEN) {
@@ -87,18 +88,6 @@ function startStreaming() {
     });
 
     intervalId = setInterval(aggregateShares, 3000);
-}
-
-function handleToggle() {
-
-    button = document.getElementById('toggleButton')
-    if(button.textContent === 'Start conversation') {
-        startStreaming();
-        document.getElementById('toggleButton').textContent = 'Stop conversation';
-    } else {
-        stopStreaming();
-        document.getElementById('toggleButton').textContent = 'Start conversation';
-    }
 }
 
 function stopStreaming() {
@@ -125,6 +114,18 @@ function stopStreaming() {
     if (socket) {
         socket.close();
         socket = null;
+    }
+}
+
+function handleToggle() {
+
+    button = document.getElementById('toggleButton')
+    if(button.textContent === 'Start conversation') {
+        startStreaming();
+        document.getElementById('toggleButton').textContent = 'Stop conversation';
+    } else {
+        stopStreaming();
+        document.getElementById('toggleButton').textContent = 'Start conversation';
     }
 }
 
@@ -159,16 +160,6 @@ function drawPie(data) {
 }
 
 function float32ToBase64(float32Array) {
-
-    const byteLength = float32Array.length * 4;
-    const buffer = new ArrayBuffer(byteLength);
-    const view = new DataView(buffer);
-
-    for (let i = 0; i < float32Array.length; i++) {
-        view.setFloat32(i * 4, float32Array[i], true);
-    }
-
-    const bytes = new Uint8Array(buffer);
-    const base64String = btoa(String.fromCharCode.apply(null, bytes));
-    return base64String;
+    const bytes = new Uint8Array(float32Array.buffer);
+    return btoa(String.fromCharCode.apply(null, bytes));
 }
