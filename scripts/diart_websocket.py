@@ -32,7 +32,13 @@ embedding = EmbeddingModel.from_pretrained("pyannote/embedding")
 
 config = SpeakerDiarizationConfig(
     segmentation=segmentation,
+<<<<<<< HEAD
+    embedding=embedding,
+    #delta_new=0.7,
+    max_speakers=3
+=======
     embedding=embedding
+>>>>>>> main
 )
 
 pipeline = SpeakerDiarization(config)
