@@ -1,20 +1,11 @@
-<<<<<<< HEAD
-SPEAKER input_device:None 1 9.508 3.500 <NA> <NA> speaker0 <NA> <NA>
-SPEAKER input_device:None 1 13.258 0.250 <NA> <NA> speaker0 <NA> <NA>
-=======
-SPEAKER input_device:None 1 9.508 7.617 <NA> <NA> speaker0 <NA> <NA>
-SPEAKER input_device:None 1 17.508 5.500 <NA> <NA> speaker0 <NA> <NA>
-SPEAKER input_device:None 1 25.008 1.500 <NA> <NA> speaker0 <NA> <NA>
-SPEAKER input_device:None 1 26.508 30.033 <NA> <NA> speaker1 <NA> <NA>
-SPEAKER input_device:None 1 57.008 0.500 <NA> <NA> speaker1 <NA> <NA>
-SPEAKER input_device:None 1 57.508 0.733 <NA> <NA> speaker0 <NA> <NA>
-SPEAKER input_device:None 1 58.508 1.500 <NA> <NA> speaker1 <NA> <NA>
-SPEAKER input_device:None 1 60.008 1.000 <NA> <NA> speaker0 <NA> <NA>
-SPEAKER input_device:None 1 61.592 0.050 <NA> <NA> speaker0 <NA> <NA>
-SPEAKER input_device:None 1 61.642 0.133 <NA> <NA> speaker1 <NA> <NA>
-SPEAKER input_device:None 1 61.758 0.250 <NA> <NA> speaker0 <NA> <NA>
-SPEAKER input_device:None 1 62.008 1.000 <NA> <NA> speaker1 <NA> <NA>
-SPEAKER input_device:None 1 63.008 1.533 <NA> <NA> speaker2 <NA> <NA>
-SPEAKER input_device:None 1 64.592 7.249 <NA> <NA> speaker2 <NA> <NA>
-SPEAKER input_device:None 1 72.008 13.633 <NA> <NA> speaker2 <NA> <NA>
->>>>>>> main
+SPEAKER input_device:None 1 9.008 7.533 <NA> <NA> speaker0 <NA> <NA>
+SPEAKER input_device:None 1 23.008 0.500 <NA> <NA> speaker0 <NA> <NA>
+SPEAKER input_device:None 1 24.008 5.500 <NA> <NA> speaker0 <NA> <NA>
+SPEAKER input_device:None 1 31.325 1.183 <NA> <NA> speaker0 <NA> <NA>
+SPEAKER input_device:None 1 32.508 30.000 <NA> <NA> speaker1 <NA> <NA>
+SPEAKER input_device:None 1 62.758 2.750 <NA> <NA> speaker1 <NA> <NA>
+SPEAKER input_device:None 1 65.508 1.350 <NA> <NA> speaker0 <NA> <NA>
+SPEAKER input_device:None 1 67.375 0.133 <NA> <NA> speaker0 <NA> <NA>
+SPEAKER input_device:None 1 67.508 1.000 <NA> <NA> speaker1 <NA> <NA>
+SPEAKER input_device:None 1 68.508 11.500 <NA> <NA> speaker2 <NA> <NA>
+SPEAKER input_device:None 1 69.375 0.133 <NA> <NA> speaker0 <NA> <NA>
