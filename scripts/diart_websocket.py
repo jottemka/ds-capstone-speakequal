@@ -32,8 +32,7 @@ embedding = EmbeddingModel.from_pretrained("pyannote/embedding")
 
 config = SpeakerDiarizationConfig(
     segmentation=segmentation,
-    embedding=embedding,
-    delta_new=0.7
+    embedding=embedding
 )
 
 pipeline = SpeakerDiarization(config)
@@ -53,4 +52,5 @@ inference.attach_observers(DummyObserver())
 #webbrowser.open('../webapp/streaming.html')
 
 print("Waiting for signal..")
+
 prediction = inference()
