@@ -45,8 +45,12 @@ def start():
 
     config = SpeakerDiarizationConfig(
         segmentation=segmentation,
-        embedding=embedding
-    )
+        embedding=embedding,
+        #tau_active = .1, # Threshold for detecting active speakers.
+        delta_new = .7, # If the distance between a local speaker and all centroids is larger than delta_new, then a new centroid is created for the current speaker.
+        metric = "cosine",
+        max_speakers = 20,
+)
 
     app.pipeline = SpeakerDiarization(config)
     app.source = WebSocketAudioSource(44100, "127.0.0.1", 7007)
