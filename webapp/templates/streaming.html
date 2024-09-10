@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Microphone to WebSocket</title>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <style type="text/css">
 
         body {
@@ -18,18 +17,60 @@
         }
 
     </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!--<script type="module" src="/static/chartjs-4.4.1.min.js"></script>-->
+    <script type="text/javascript" src="/static/jquery-3.7.1.min.js"></script>
+    <script type="text/javascript" src="/static/streaming.js"></script>
+    <script type="text/javascript">
+        $(document).ready(function() {
+            $("#hparamsUpdateButton").click(function() {
+                console.log($("#hparamsForm").serialize())
+                $.get("/service/update-hparams", $("#hparamsForm").serialize());
+            });
+
+            $("#resetButton").click(function() {
+                $.get("/service/reset");
+                resetConversation();
+            });
+
+            $("#toggleButton").click(function() {
+                handleToggle();
+            });
+
+            $("#startButton").click(function() {
+                $.get("/service/start");
+            });
+
+            $("#stopButton").click(function() {
+                $.get("/service/stop");
+            });
+        });
+        
+    </script>
 </head>
 <body>
     <div id="page-container">
         <h1>SpeakEqual</h1>
         <div>
-            <button onclick="handleToggle()" id="toggleButton">Start conversation</button>
-            <button onclick="resetConversation()">Reset</button>
+            <button id="toggleButton">Start conversation</button>
+            <button id="resetButton">Reset</button>
+            <button id="startButton">Start model</button>
+            <button id="stopButton">Stop model</button>
+        </div>
+        <div>
+            Parameters:
+            <form id="hparamsForm">
+                <div>tau_active: <input type="text" name="tau_active" value="0.6" size="5"></div>
+                <div>rho_update: <input type="text" name="rho_update" value="0.3" size="5"></div>
+                <div>delta_new: <input type="text" name="delta_new" value="1.0" size="5"></div>
+                <div>metric: <input type="text" name="metric" value="cosine" size="5"></div>
+                <div>max_speakers: <input type="text" name="max_speakers" value="20" size="5"></div>
+            </form>
+            <input type="button" id="hparamsUpdateButton" value="Update">
         </div>
         <div>
             <canvas id="chartjsPieChart"></canvas>
         </div>
-        <script type="text/javascript" src="/static/streaming.js"></script>
     </div>
 </body>
 </html>
