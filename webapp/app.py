@@ -45,9 +45,8 @@ def start():
 
     config = SpeakerDiarizationConfig(
         segmentation=segmentation,
-        embedding=embedding,
-        delta_new=0.6
-    )
+        embedding=embedding)
+
 
     app.pipeline = SpeakerDiarization(config)
     app.source = WebSocketAudioSource(44100, "127.0.0.1", 7007)
