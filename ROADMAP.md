@@ -38,11 +38,15 @@
 - Understanding neural network structure for speaker embedding
 - Explore clustering options in Diart
 
+- Websocket-problem solved: websocket gives 44100 Hz signal, pipeline needs 16000 Hz
+
 ### Week 3
 - Train the underlying embedding model ourselves
+- Adjust hyperparameters (tau_active, rho_update, delta_new, max_speakers) on the fly
 - Instead of "speaker0" show the real name => Speaker detection with prior training
 - Perform live-tests in real world environment. E.g. Webcalls, Room microphone, Phone Microphone
 - Finalize the User Interface
+- Implement the idea that a use can click on the pie-chart to play a sample
 
 ### Week 4
 - Prepare the final presentation
