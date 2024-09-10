@@ -4,7 +4,7 @@ from diart.inference import StreamingInference
 from diart.models import SegmentationModel, EmbeddingModel
 from diart.sinks import Observer
 
-from flask import Flask, render_template
+from flask import Flask, render_template, request
 
 from huggingface_hub import login
 
@@ -45,12 +45,8 @@ def start():
 
     config = SpeakerDiarizationConfig(
         segmentation=segmentation,
-        embedding=embedding,
-        #tau_active = .1, # Threshold for detecting active speakers.
-        delta_new = .7, # If the distance between a local speaker and all centroids is larger than delta_new, then a new centroid is created for the current speaker.
-        metric = "cosine",
-        max_speakers = 20,
-)
+        embedding=embedding)
+
 
     app.pipeline = SpeakerDiarization(config)
     app.source = WebSocketAudioSource(44100, "127.0.0.1", 7007)
@@ -82,27 +78,31 @@ def stop():
 def reset():
     # FIXME Return http error code
     if app.pipeline is not None:
-        print("Hello")
         app.pipeline.reset()
 
+    return {}
+
 @app.route("/service/update-hparams")
-def update_hparams(tau_active=None, rho_update=None, delta_new=None, metric=None, max_speakers=None):
+def update_hparams():
     # FIXME Return http error code
     if app.pipeline is not None:
-        if tau_active is not None:
-            app.pipeline.clustering.tau_active = tau_active
+        if "tau_active" in request.args:
+            app.pipeline.clustering.tau_active = float(request.args["tau_active"])
 
-        if rho_update is not None:
-            app.pipeline.clustering.rho_update = rho_update
+        if "rho_update" in request.args:
+            app.pipeline.clustering.rho_update = float(request.args["rho_update"])
 
-        if delta_new is not None:
-            app.pipeline.clustering.delta_new = delta_new
+        if "delta_new" in request.args:
+            print("Guggug")
+            app.pipeline.clustering.delta_new = float(request.args["delta_new"])
 
-        if metric is not None:
-            app.pipeline.clustering.metric = metric
+        if "metric" in request.args:
+            app.pipeline.clustering.metric = request.args["metric"]
 
-        if max_speakers is not None:
-            app.pipeline.clustering.max_speakers = max_speakers
+        if "max_speakers" in request.args:
+            app.pipeline.clustering.max_speakers = int(request.args["max_speakers"])
+            
+    return {}
 
 if __name__ == "__main__":  
    app.run()  
