@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Microphone to WebSocket</title>
+    <title>Speequal App</title>
     <style type="text/css">
 
         body {
@@ -50,7 +50,7 @@
 </head>
 <body>
     <div id="page-container">
-        <h1>SpeakEqual</h1>
+        <h1>Speequal</h1>
         <div>
             <button id="toggleButton">Start conversation</button>
             <button id="resetButton">Reset</button>
@@ -58,13 +58,13 @@
             <button id="stopButton">Stop model</button>
         </div>
         <div>
-            Parameters:
+            Settings:
             <form id="hparamsForm">
-                <div>tau_active: <input type="text" name="tau_active" value="0.6" size="5"></div>
-                <div>rho_update: <input type="text" name="rho_update" value="0.3" size="5"></div>
-                <div>delta_new: <input type="text" name="delta_new" value="1.0" size="5"></div>
-                <div>metric: <input type="text" name="metric" value="cosine" size="5"></div>
-                <div>max_speakers: <input type="text" name="max_speakers" value="20" size="5"></div>
+                <div>Speaker Activation Threshold (tau): <input type="text" name="tau_active" value="0.6" size="5"></div>
+                <div>Embedding Sensitivity (rho): <input type="text" name="rho_update" value="0.3" size="5"></div>
+                <div>Speaker Discrimination (delta): <input type="text" name="delta_new" value="1.0" size="5"></div>
+                <div>Distance Metric: <input type="text" name="metric" value="cosine" size="5"></div>
+                <div>Max Speakers: <input type="text" name="max_speakers" value="20" size="5"></div>
             </form>
             <input type="button" id="hparamsUpdateButton" value="Update">
         </div>
