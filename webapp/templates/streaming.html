@@ -3,72 +3,85 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Microphone to WebSocket</title>
-    <style type="text/css">
+    <title>Speequal</title>
 
-        body {
-            font-family: Arial, Helvetica, sans-serif;
-        }
+    <link rel="stylesheet" href="/static/css/font-awesome.min.css">
+    <link rel="stylesheet" href="/static/css/jquery-ui.min.css">
+    <link rel="stylesheet" href="/static/css/jquery-ui.structure.min.css">
+    <link rel="stylesheet" href="/static/css/jquery-ui.theme.min.css">
+    <link rel="stylesheet" href="/static/css/speequal.css">
 
-        #page-container { 
-            margin: auto;
-            width: 500px;
-            text-align: center;      
-        }
-
-    </style>
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!--<script type="module" src="/static/chartjs-4.4.1.min.js"></script>-->
-    <script type="text/javascript" src="/static/jquery-3.7.1.min.js"></script>
-    <script type="text/javascript" src="/static/streaming.js"></script>
-    <script type="text/javascript">
-        $(document).ready(function() {
-            $("#hparamsUpdateButton").click(function() {
-                console.log($("#hparamsForm").serialize())
-                $.get("/service/update-hparams", $("#hparamsForm").serialize());
-            });
-
-            $("#resetButton").click(function() {
-                $.get("/service/reset");
-                resetConversation();
-            });
-
-            $("#toggleButton").click(function() {
-                handleToggle();
-            });
-
-            $("#startButton").click(function() {
-                $.get("/service/start");
-            });
-
-            $("#stopButton").click(function() {
-                $.get("/service/stop");
-            });
-        });
-        
-    </script>
+    <script src="/static/js/chartjs-4.4.1.min.js"></script>
+    <script src="/static/js/jquery-3.7.1.min.js"></script>
+    <script src="/static/js/jquery-ui-1.14.0.min.js"></script>
+    <script src="/static/js/speequal.js"></script>
 </head>
 <body>
-    <div id="page-container">
-        <h1>SpeakEqual</h1>
-        <div>
-            <button id="toggleButton">Start conversation</button>
-            <button id="resetButton">Reset</button>
-            <button id="startButton">Start model</button>
-            <button id="stopButton">Stop model</button>
+    <div id="pageContainer">
+        <div id="logoContainer">
+            <img src="/static/img/logo.png" width="250" alt="Logo" />
+            <img src="/static/img/conversation.jpg" width="300" alt="Conversation" />
         </div>
-        <div>
-            Parameters:
-            <form id="hparamsForm">
-                <div>tau_active: <input type="text" name="tau_active" value="0.6" size="5"></div>
-                <div>rho_update: <input type="text" name="rho_update" value="0.3" size="5"></div>
-                <div>delta_new: <input type="text" name="delta_new" value="1.0" size="5"></div>
-                <div>metric: <input type="text" name="metric" value="cosine" size="5"></div>
-                <div>max_speakers: <input type="text" name="max_speakers" value="20" size="5"></div>
+        <div id="controlsContainer">
+            <button id="startButton" class="btn btn-green"><i class="fa fa-microphone"></i>Start</button>
+            <button id="stopButton" class="btn btn-red"><i class="fa fa-microphone-slash"></i>Stop</button>
+            <button id="resetButton" class="btn btn-grey"><i class="fa fa-rotate-left"></i>Reset</button>
+            <button id="configButton" class="btn btn-blue"><i class="fa fa-sliders"></i>Settings</button>
+        </div>
+        <div id="configContainer">
+            <form id="configForm">
+                <h3>Hyperparameters</h3>
+                <p>
+                    <div>
+                        <label for="tau_active">tau_active:</label>
+                        <input id="valueTauActive" type="text" name="tau_active" size="3" readonly><br/>
+                        <span class="configText">
+                            Threshold for detecting active speakers. 
+                            This threshold is applied on the maximum value of per-speaker output activation of the local segmentation model.
+                        </span>
+                    </div>
+                    <div class="sliderContainer" id="sliderTauActive"></div>                   
+                </p>         
+                <p>
+                    <div>
+                        <label for="rho_update">rho_update:</label>
+                        <input id="valueRhoUpdate" type="text" name="rho_update" size="3" readonly><br/>
+                        <span class="configText">
+                            Threshold for considering the extracted embedding when updating the centroid of the local speaker.
+                            The centroid to which a local speaker is mapped is only updated if the ratio of speech/chunk duration
+                            of a given local speaker is greater than this threshold.
+                        </span>
+                    </div>
+                    <div class="sliderContainer" id="sliderRhoUpdate"></div>
+                </p>      
+                <p>
+                    <div>
+                        <label for="delta_new">delta_new:</label>
+                        <input id="valueDeltaNew" type="text" name="delta_new" size="3" readonly><br/>       
+                        <span class="configText">
+                            Threshold on the distance between a speaker embedding and a centroid. 
+                            If the distance between a local speaker and all centroids is larger than delta_new, 
+                            then a new centroid is created for the current speaker.
+                        </span>           
+                    </div>
+                    <div class="sliderContainer" id="sliderDeltaNew"></div>
+                </p>            
+                <p>
+                    <div>
+                        <label for="max_speakers">max_speakers:</label>
+                        <input id="valueMaxSpeakers" type="text" name="max_speakers" size="3" readonly><br/>
+                        <span class="configText">
+                            Maximum number of global speakers to track through a conversation.
+                        </span>     
+                    </div>
+                    <div class="sliderContainer" id="sliderMaxSpeakers"></div>
+                </p>
+                <p>
+                    <button id="configUpdateButton" class="btn btn-blue"><i class="fa fa-rotate"></i>Update</button>
+                </p>
             </form>
-            <input type="button" id="hparamsUpdateButton" value="Update">
         </div>
-        <div>
+        <div id="chartContainer">
             <canvas id="chartjsPieChart"></canvas>
         </div>
     </div>

@@ -18,3 +18,4 @@ diart
 PyQt5
 onnxruntime
 flask
+websockets

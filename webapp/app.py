@@ -4,13 +4,19 @@ from diart.inference import StreamingInference
 from diart.models import SegmentationModel, EmbeddingModel
 from diart.sinks import Observer
 
-from flask import Flask, render_template, request
+from flask import Flask, render_template, request, Response
+
+from websockets.sync.client import connect
 
 from huggingface_hub import login
 
 import json
+import threading
 
-HUGGING_FACE_TOKEN = "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"
+
+HOST = "127.0.0.1"
+PORT_FLASK = 5000
+PORT_WEBSOCKET = 7007
 
 class WSAggregationObserver(Observer):
 
@@ -19,90 +25,102 @@ class WSAggregationObserver(Observer):
         self.source = source
 
     def on_next(self, value) -> None:
-        annotation = value[0]
-        if not annotation:
-            return
-        print(annotation)
-        chart = annotation.chart()
-        if len(chart) > 0:
-            self.source.send(json.dumps(chart))
+        if value[0]:
+            print(value[0])
+            chart = value[0].chart()
+            if len(chart) > 0:
+                self.source.send(json.dumps(chart))
 
 
 app = Flask(__name__)
-app.pipeline = None
-app.source = None
+
+def is_running():
+    try:
+        with connect(f"ws://{HOST}:{PORT_WEBSOCKET}"):
+            return True
+    except Exception as e:
+        return False 
+    
+def init():
+    #login("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")
+    app._inference = None
+    app._config = SpeakerDiarizationConfig(
+        segmentation=SegmentationModel.from_pretrained("pyannote/segmentation"), 
+        embedding=EmbeddingModel.from_pretrained("pyannote/embedding")
+    )
+
+init()
 
 @app.route("/")
 def index():
     return render_template("streaming.html")
 
-@app.route("/service/start")
+@app.route("/speequal/start")
 def start():
-    #login(HUGGING_FACE_TOKEN)
+    if is_running():
+        return "Model is already running", 400
 
-    segmentation = SegmentationModel.from_pretrained("pyannote/segmentation")
-    embedding = EmbeddingModel.from_pretrained("pyannote/embedding")
+    pipeline = SpeakerDiarization(app._config)
+    source = WebSocketAudioSource(44100, HOST, PORT_WEBSOCKET)
 
-    config = SpeakerDiarizationConfig(
-        segmentation=segmentation,
-        embedding=embedding)
-
-
-    app.pipeline = SpeakerDiarization(config)
-    app.source = WebSocketAudioSource(44100, "127.0.0.1", 7007)
-
-    inference = StreamingInference(
-        app.pipeline, 
-        app.source, 
+    app._inference = StreamingInference(
+        pipeline=pipeline,
+        source=source, 
         do_profile=False, 
         do_plot=False, 
         show_progress=False
     )
 
-    inference.attach_observers(WSAggregationObserver(app.source))
+    app._inference.attach_observers(WSAggregationObserver(source))
 
-    print("Waiting for signal..")
-    inference()
-    return {}
+    def inference_runner():
+        print("Waiting for signal..")
+        app._inference()
 
-@app.route("/service/stop")
+    thread = threading.Thread(target=inference_runner)
+    thread.start()
+
+    return Response(status = 200)
+
+@app.route("/speequal/stop")
 def stop():
-    # TODO Impl.
-    if app.source is not None:
-        print(type(app.source))
-        app.source.close()
-    
-    return {}
+    if not is_running():
+        return "Model is not running", 400
+        
+    app._inference.source.close()
+    init()
 
-@app.route("/service/reset")
+    return Response(status = 200)
+
+@app.route("/speequal/status")
+def status():
+    return {"status": is_running()}
+
+@app.route("/speequal/reset")
 def reset():
-    # FIXME Return http error code
-    if app.pipeline is not None:
-        app.pipeline.reset()
+    if not is_running():
+        return "Model is not running", 400
 
-    return {}
+    app._inference.pipeline.reset()
 
-@app.route("/service/update-hparams")
-def update_hparams():
-    # FIXME Return http error code
-    if app.pipeline is not None:
-        if "tau_active" in request.args:
-            app.pipeline.clustering.tau_active = float(request.args["tau_active"])
+    return Response(status = 200)
 
-        if "rho_update" in request.args:
-            app.pipeline.clustering.rho_update = float(request.args["rho_update"])
+@app.route("/speequal/update-config")
+def update_config():
+    if "tau_active" in request.args:
+        app._config.tau_active = float(request.args["tau_active"])
 
-        if "delta_new" in request.args:
-            print("Guggug")
-            app.pipeline.clustering.delta_new = float(request.args["delta_new"])
+    if "rho_update" in request.args:
+        app._config.rho_update = float(request.args["rho_update"])
 
-        if "metric" in request.args:
-            app.pipeline.clustering.metric = request.args["metric"]
+    if "delta_new" in request.args:
+        app._config.delta_new = float(request.args["delta_new"])
 
-        if "max_speakers" in request.args:
-            app.pipeline.clustering.max_speakers = int(request.args["max_speakers"])
+    if "max_speakers" in request.args:
+        app._config.max_speakers = int(request.args["max_speakers"])
             
-    return {}
+    return Response(status = 200)
+
 
 if __name__ == "__main__":  
-   app.run()  
+   app.run(host=HOST, port=PORT_FLASK)  
