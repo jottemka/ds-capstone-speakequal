@@ -18,9 +18,10 @@ embedding = m.EmbeddingModel.from_pretrained("pyannote/embedding")
 config = SpeakerDiarizationConfig(
     segmentation=segmentation,
     embedding=embedding,
-    #tau_active = .1, # Threshold for detecting active speakers.
-    delta_new = .7, # If the distance between a local speaker and all centroids is larger than delta_new, then a new centroid is created for the current speaker.
-    metric = "cosine",
+    #tau_active = .1,
+    rho_update= .3  , # Threshold for detecting active speakers.
+    delta_new = .8, # If the distance between a local speaker and all centroids is larger than delta_new, then a new centroid is created for the current speaker.
+    normalize_embedding_weights = True,
     max_speakers = 20,
 )
 
@@ -28,7 +29,7 @@ config = SpeakerDiarizationConfig(
 pipeline = SpeakerDiarization(config)
 mic = MicrophoneAudioSource()
 inference = StreamingInference(pipeline, mic, do_plot=True)
-inference.attach_observers(RTTMWriter(mic.uri, "../data/out.rttm"))
+#inference.attach_observers(RTTMWriter(mic.uri, "../data/out.rttm"))
 prediction = inference()
 
 SpeakerDiarization(  )
