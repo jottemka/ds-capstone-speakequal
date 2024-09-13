@@ -29,6 +29,17 @@
             <button id="configButton" class="btn btn-blue"><i class="fa fa-sliders"></i>Settings</button>
         </div>
         <div id="configContainer">
+            <h3>Connection settings</h3>
+            <p>
+                <div>
+                    <label for="websocket_server">Websocket Server:</label>
+                    <input id="valueWebsocketServer" type="text" name="websocket_server" size="25" value="127.0.0.1:7007"><br/>
+                    <span class="configText">
+                        Websocket server to stream the audio data to.
+                    </span>
+                </div>                 
+            </p>
+
             <form id="configForm">
                 <h3>Hyperparameters</h3>
                 <p>
@@ -41,7 +52,7 @@
                         </span>
                     </div>
                     <div class="sliderContainer" id="sliderTauActive"></div>                   
-                </p>         
+                </p>
                 <p>
                     <div>
                         <label for="rho_update">rho_update:</label>
@@ -53,7 +64,7 @@
                         </span>
                     </div>
                     <div class="sliderContainer" id="sliderRhoUpdate"></div>
-                </p>      
+                </p>
                 <p>
                     <div>
                         <label for="delta_new">delta_new:</label>
@@ -65,7 +76,7 @@
                         </span>           
                     </div>
                     <div class="sliderContainer" id="sliderDeltaNew"></div>
-                </p>            
+                </p>   
                 <p>
                     <div>
                         <label for="max_speakers">max_speakers:</label>

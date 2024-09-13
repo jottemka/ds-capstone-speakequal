@@ -105,7 +105,16 @@ def reset():
 
     return Response(status = 200)
 
-@app.route("/speequal/update-config")
+@app.route("/speequal/config/get")
+def get_config():
+    return {
+        "tau_active": app._config.tau_active,
+        "rho_update": app._config.rho_update,
+        "delta_new": app._config.delta_new,
+        "max_speakers": app._config.max_speakers
+    }
+
+@app.route("/speequal/config/update")
 def update_config():
     if "tau_active" in request.args:
         app._config.tau_active = float(request.args["tau_active"])
