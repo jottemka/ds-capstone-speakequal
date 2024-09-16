@@ -2,7 +2,7 @@ from diart import SpeakerDiarization, SpeakerDiarizationConfig
 from diart.sources import WebSocketAudioSource
 from diart.inference import StreamingInference
 from diart.models import SegmentationModel, EmbeddingModel
-from diart.sinks import Observer, RTTMWriter
+from diart.sinks import Observer, RTTMWriter, _extract_prediction
 
 from flask import Flask, render_template, request, Response
 
@@ -25,7 +25,7 @@ class WSAggregationObserver(Observer):
         self.source = source
 
     def on_next(self, value) -> None:
-        prediction = super._extract_prediction(value)
+        prediction = _extract_prediction(value)
         print(prediction)
         chart = prediction.chart()
         if len(chart) > 0:
