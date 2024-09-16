@@ -12,6 +12,7 @@ from huggingface_hub import login
 
 import json
 import threading
+import datetime
 
 
 HOST = "127.0.0.1"
@@ -45,8 +46,10 @@ def init():
     #login("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")
     app._inference = None
     app._config = SpeakerDiarizationConfig(
-        segmentation=SegmentationModel.from_pretrained("pyannote/segmentation"), 
-        embedding=EmbeddingModel.from_pretrained("pyannote/embedding")
+        segmentation=SegmentationModel.from_pretrained("pyannote/segmentation-3.0"), 
+        embedding=EmbeddingModel.from_pretrained("pyannote/embedding"),
+        rho_update=0.2,
+        delta_new=0.9
     )
 
 init()
@@ -71,7 +74,8 @@ def start():
         show_progress=False
     )
 
-    app._inference.attach_observers(RTTMWriter("mic://localhost", "data/derived/eval-webapp.rttm"))
+    time_index = datetime.datetime.now().strftime("%Y-%m-%d_%H%M%S")
+    app._inference.attach_observers(RTTMWriter("mic://localhost", f"data/derived/webapp/{time_index}.rttm"))
     app._inference.attach_observers(WSAggregationObserver(source))
 
     def inference_runner():

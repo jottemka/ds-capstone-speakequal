@@ -6,12 +6,16 @@ from diart.sinks import RTTMWriter
 
 from huggingface_hub import login
 
+import datetime
+
 
 #login("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")
 
 config = SpeakerDiarizationConfig(
-    segmentation=SegmentationModel.from_pretrained("pyannote/segmentation"),
-    embedding=EmbeddingModel.from_pretrained("pyannote/embedding")
+    segmentation=SegmentationModel.from_pretrained("pyannote/segmentation-3.0"),
+    embedding=EmbeddingModel.from_pretrained("pyannote/embedding"),
+    rho_update=0.2,
+    delta_new=0.9
 )
 
 pipeline = SpeakerDiarization(config)
@@ -24,7 +28,8 @@ inference = StreamingInference(
     show_progress=False
 )
 
-inference.attach_observers(RTTMWriter("mic://localhost", "data/derived/eval-tester.rttm"))
+time_index = datetime.datetime.now().strftime("%Y-%m-%d_%H%M%S")
+inference.attach_observers(RTTMWriter("mic://localhost", f"data/derived/tester/{time_index}.rttm"))
 
 print("Waiting for signal..")
 prediction = inference()
