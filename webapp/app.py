@@ -2,7 +2,7 @@ from diart import SpeakerDiarization, SpeakerDiarizationConfig
 from diart.sources import WebSocketAudioSource
 from diart.inference import StreamingInference
 from diart.models import SegmentationModel, EmbeddingModel
-from diart.sinks import Observer
+from diart.sinks import Observer, RTTMWriter
 
 from flask import Flask, render_template, request, Response
 
@@ -25,11 +25,11 @@ class WSAggregationObserver(Observer):
         self.source = source
 
     def on_next(self, value) -> None:
-        if value[0]:
-            print(value[0])
-            chart = value[0].chart()
-            if len(chart) > 0:
-                self.source.send(json.dumps(chart))
+        prediction = super._extract_prediction(value)
+        print(prediction)
+        chart = prediction.chart()
+        if len(chart) > 0:
+            self.source.send(json.dumps(chart))
 
 
 app = Flask(__name__)
@@ -71,6 +71,7 @@ def start():
         show_progress=False
     )
 
+    app._inference.attach_observers(RTTMWriter("mic://localhost", "data/derived/eval-webapp.rttm"))
     app._inference.attach_observers(WSAggregationObserver(source))
 
     def inference_runner():
