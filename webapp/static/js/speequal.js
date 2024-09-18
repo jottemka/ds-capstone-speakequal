@@ -114,8 +114,10 @@ function startStreaming() {
         console.log(event.data)
     };
 
-    audioContext = new (window.AudioContext || window.webkitAudioContext)();
-    
+    audioContext = new (window.AudioContext || window.webkitAudioContext)({
+        sampleRate: 16000
+    });
+
     navigator.mediaDevices.getUserMedia({ audio: true }).then(stream => {
         mediaStream = stream;
 

@@ -19,3 +19,5 @@ PyQt5
 onnxruntime
 flask
 websockets
+streamlit
+plotly
