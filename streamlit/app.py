@@ -108,7 +108,7 @@ max_speakers = st.sidebar.slider("max_speakers", min_value=1, max_value=20, step
 st.sidebar.button("Start streaming", disabled=st.session_state.stream, on_click=toggle_streaming)
 st.sidebar.button("Stop streaming", disabled=not st.session_state.stream, on_click=toggle_streaming)
 
-col1, col2, col3 = st.columns([0.25, 0.5, 0.25])
+col1, col2, col3 = st.columns([0.1, 0.8, 0.1])
 col2.image("assets/img/logo.png")
 col2.image("assets/img/conversation.jpg")
 
@@ -117,7 +117,7 @@ plot_placeholder = col2.empty()
 @st.fragment(run_every=3.0)
 def update_chart(data):
     fig = go.Figure(data=[go.Pie(values=list(data.values()), labels=list(data.keys()))])
-    fig.update_traces(hoverinfo='label+percent', textinfo='value', textfont_size=20, marker=dict(colors=PIE_COLORS, line=dict(color='#000000', width=2)))
+    fig.update_traces(hoverinfo='label+percent', textinfo='value', textfont_size=20, marker=dict(colors=PIE_COLORS, line=dict(color='#000000', width=2)), texttemplate='%{value:.0f}s')
     fig.update_layout(transition=dict(duration=500, easing='cubic-in-out'))
     plot_placeholder.plotly_chart(fig)
 
@@ -132,7 +132,8 @@ if st.session_state.stream is True:
         tau_active=tau_active,
         rho_update=rho_update,
         delta_new=delta_new,
-        max_speakers=max_speakers
+        max_speakers=max_speakers,
+        latency=3.0
     )
 else:
     stop_streaming()
