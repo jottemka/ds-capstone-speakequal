@@ -13,9 +13,7 @@ import datetime
 
 config = SpeakerDiarizationConfig(
     segmentation=SegmentationModel.from_pretrained("pyannote/segmentation-3.0"),
-    embedding=EmbeddingModel.from_pretrained("pyannote/embedding"),
-    rho_update=0.2,
-    delta_new=0.9
+    embedding=EmbeddingModel.from_pretrained("pyannote/embedding")
 )
 
 pipeline = SpeakerDiarization(config)

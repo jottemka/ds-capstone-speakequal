@@ -47,9 +47,7 @@ def init():
     app._inference = None
     app._config = SpeakerDiarizationConfig(
         segmentation=SegmentationModel.from_pretrained("pyannote/segmentation-3.0"), 
-        embedding=EmbeddingModel.from_pretrained("pyannote/embedding"),
-        rho_update=0.2,
-        delta_new=0.9
+        embedding=EmbeddingModel.from_pretrained("pyannote/embedding")
     )
 
 init()
@@ -64,7 +62,7 @@ def start():
         return "Model is already running", 400
 
     pipeline = SpeakerDiarization(app._config)
-    source = WebSocketAudioSource(44100, HOST, PORT_WEBSOCKET)
+    source = WebSocketAudioSource(16000, HOST, PORT_WEBSOCKET)
 
     app._inference = StreamingInference(
         pipeline=pipeline,
