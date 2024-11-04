@@ -2,19 +2,14 @@
 
 ![alt text](webapp/static/img/logo.png)
 
-Speequal is an app that gives users a real-time overview of the share each speaker has in a conversation. It is intended to help us to make conversation more equitable and fair.
+Speequal is an app that gives users a real-time overview of the share each speaker has in a conversation. It is intended to help us make conversations more equitable and fair.
 
-The app was developed as part of the neuefische Data Science, Machine Learning & AI Bootcamp 2024 in Hamburg. 
-
-
-## Developers
-
-Speequal was developed by:
+The app was developed as part of the neuefische Data Science, Machine Learning & AI Bootcamp 2024 in Hamburg by:
 
 - Christian Reimann: https://github.com/christian-reimann
 - Jakob Koscholke: https://github.com/jottemka
 
-Notice, however, that the heart of the app is the diart framework:
+Notice, however, that the app is largely based on the diart framework:
  
  - https://github.com/juanmc2005/diart
 
