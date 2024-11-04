@@ -2,7 +2,7 @@
 
 ![alt text](webapp/static/img/logo.png)
 
-Speequal is an app that gives users a real-time overview of the share each speaker has in a conversation. It is intended to help us make conversation more equitable and fair.
+Speequal is an app that gives users a real-time overview of the share each speaker has in a conversation. It is intended to help us make conversations more equitable and fair.
 
 The app was developed as part of the neuefische Data Science, Machine Learning & AI Bootcamp 2024 in Hamburg by:
 
