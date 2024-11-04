@@ -4,13 +4,19 @@
 
 Speequal is an app that gives users a real-time overview of the share each speaker has in a conversation. It is intended to help us to make conversation more equitable and fair.
 
-The app was developed as part of the neuefische Data Science, Machine Learning & AI Bootcamp 2024 in Hamburg.
+The app was developed as part of the neuefische Data Science, Machine Learning & AI Bootcamp 2024 in Hamburg. 
 
 
 ## Developers
 
+Speequal was developed by:
+
 - Christian Reimann: https://github.com/christian-reimann
 - Jakob Koscholke: https://github.com/jottemka
+
+Notice, however, that the heart of the app is the diart framework:
+ 
+ - https://github.com/juanmc2005/diart
 
 ## Running The App
 
@@ -20,7 +26,7 @@ To run the app, navigate to the "streamlit" folder and execute the following com
 
 `streamlit run app.py`
 
-You can then start monitoring a conversation via microphone or by feeding an audio signal into the app and then pushing the "Start streaming" button.
+You can then start monitoring a conversation via microphone or by feeding an audio signal into the app and then clicking the "Start streaming" button. To stop, simply click the "Stop streaming" button.
 
 ## Fine-Tuning
 
