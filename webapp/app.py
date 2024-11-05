@@ -18,6 +18,7 @@ import datetime
 HOST = "127.0.0.1"
 PORT_FLASK = 5000
 PORT_WEBSOCKET = 7007
+your_huggingface_token = ""
 
 class WSAggregationObserver(Observer):
 
@@ -43,7 +44,7 @@ def is_running():
         return False 
     
 def init():
-    #login("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")
+    #login(your_huggingface_token)
     app._inference = None
     app._config = SpeakerDiarizationConfig(
         segmentation=SegmentationModel.from_pretrained("pyannote/segmentation-3.0"), 
