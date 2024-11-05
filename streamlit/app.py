@@ -5,6 +5,7 @@ from diart.sinks import Observer, RTTMWriter, _extract_prediction
 from diart import SpeakerDiarization, SpeakerDiarizationConfig
 
 from huggingface_hub import login
+your_huggingface_token = ""
 
 import streamlit as st
 import plotly.graph_objects as go
@@ -129,7 +130,7 @@ def update_chart(data):
     
 
 if st.session_state.stream is True:
-    #login("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")
+    #login(your_huggingface_token)
     segmentation = SegmentationModel.from_pretrained("pyannote/segmentation-3.0")
     embedding = EmbeddingModel.from_pretrained("pyannote/embedding")
 
